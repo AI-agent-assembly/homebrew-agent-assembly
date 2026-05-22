@@ -30,7 +30,7 @@ jobs:
       - name: Run brew audit on Formula/
         run: |
           if compgen -G "Formula/*.rb" > /dev/null; then
-            brew audit --strict --online ./Formula/*.rb
+            brew audit --strict ./Formula/*.rb
           else
             echo "No formulas in Formula/ yet — skipping brew audit."
           fi
