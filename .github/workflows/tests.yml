@@ -19,10 +19,16 @@ jobs:
       - name: Set up Homebrew
         uses: Homebrew/actions/setup-homebrew@master
 
+      - name: Symlink checkout as the agent-assembly/agent-assembly tap
+        run: |
+          TAP_DIR="$(brew --repository)/Library/Taps/agent-assembly/homebrew-agent-assembly"
+          mkdir -p "$(dirname "$TAP_DIR")"
+          ln -sfn "$GITHUB_WORKSPACE" "$TAP_DIR"
+
       - name: Run brew style on Formula/
         run: |
           if compgen -G "Formula/*.rb" > /dev/null; then
-            brew style ./Formula/
+            brew style agent-assembly/agent-assembly
           else
             echo "No formulas in Formula/ yet — skipping brew style."
           fi
@@ -30,7 +36,7 @@ jobs:
       - name: Run brew audit on Formula/
         run: |
           if compgen -G "Formula/*.rb" > /dev/null; then
-            brew audit --strict ./Formula/*.rb
+            brew audit --strict --tap agent-assembly/agent-assembly
           else
             echo "No formulas in Formula/ yet — skipping brew audit."
           fi
